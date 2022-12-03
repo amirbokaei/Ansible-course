@@ -1,0 +1,22 @@
+- name: "add user playbook"
+  hosts: "lab"
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  var_files:
+    - "vars/userpass.yaml"
+  tasks:
+
+  - name: "add user method 1"
+    user:
+      name: {{ item.key }}
+      password: {{ item.value }}
+    with_dic: {{ userpass }}
+
+## OR
+
+    # - name: "add user method 2"
+    # user:
+    #   name: {{ item.key }}
+    #   password: {{ item.value }}
+    # loop: {{ userpass|dict2items }}
