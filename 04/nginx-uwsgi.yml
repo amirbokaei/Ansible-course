@@ -1,0 +1,17 @@
+---
+- name: Install nginx and uWSGI for a Python web application (pyweb)
+  hosts: nginx_uwsgi
+  become: yes
+  become_user: root
+
+
+- name: Install nginx and uWSGI 
+  gather_facts: False
+  become: yes
+  become_user: root
+  roles:
+     - install
+     - setup_venv_app
+     - configure_nginx_uwsgi
+     - create_service
+     - start_services

@@ -1,0 +1,23 @@
+---
+
+- name: Disable deafult site (Debian/Ubuntu)
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  when: nginx_hostless_global_config or nginx_disable_default_site
+
+- name: Create nginx config
+  template:
+    src: templates/nginx-host.conf.j2
+    dest: '{{ nginx_dir }}/{{ app_name }}.conf'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create uWSGI config
+  template:
+    src: templates/uwsgi-vassal.ini.j2
+    dest: '{{ uwsgi_dir }}/{{ app_name }}.ini'
+    owner: root
+    group: root
+    mode: 0644

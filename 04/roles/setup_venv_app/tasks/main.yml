@@ -1,0 +1,30 @@
+---
+- name: Remove base directory (if present)
+  file:
+    path: '{{ base_dir }}'
+    state: absent
+
+- name: Create empty base directory
+  file:
+    path: '{{ base_dir }}'
+    state: directory
+
+- name: Create a virtual environment
+  command: "{{ venv_full_cmd }} '{{ venv_dir }}'"
+
+- name: Clone Git repository
+  git:
+    repo: '{{ git_repo }}'
+    dest: '{{ appdata_dir }}'
+    version: '{{ git_branch }}'
+
+- name: Install requirements.txt
+  command: "'{{ venv_dir }}/bin/pip' install -r '{{ appdata_dir }}/requirements.txt'"
+
+- name: Set permissions for base directory
+  file:
+    path: '{{ base_dir }}'
+    owner: '{{ uid }}'
+    group: '{{ gid }}'
+    state: directory
+    recurse: yes

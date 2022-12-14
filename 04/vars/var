@@ -1,0 +1,30 @@
+---
+app_name: myapp
+app_package: flaskapp
+app_callable: app
+base_dir: '/srv/{{ app_name }}'
+venv_dir: '{{ base_dir }}/venv'
+appdata_dir: '{{ base_dir }}/appdata'
+nginx_server_name: 'localhost {{ app_name }}.local'
+# This for HTTP only. HTTPS requires manual config.
+nginx_http_port: 80
+uwsgi_module: '{{ app_package }}:{{ app_callable }}'
+uwsgi_processes: 1
+uwsgi_threads: 1
+uwsgi_env: []
+git_repo: https://github.com/amirbokaei/flask-hello-world
+git_branch: master
+# If this is set to "yes", the global nginx config will be replaced by one that has no default hosts.
+nginx_hostless_global_config: no
+
+ansible_python_interpreter: /usr/bin/python3
+uid: www-data
+gid: www-data
+nginx_dir: /etc/nginx/sites-enabled
+uwsgi_dir: /etc/uwsgi-emperor/vassals
+uwsgi_plugins: python3,logfile
+venv_cmd: python3 -m venv
+venv_full_cmd: '{{ venv_cmd }} --prompt "{{ app_name }}"'
+uwsgi_service_name: emperor.uwsgi
+# Disable the default site by removing /etc/nginx/sites-enabled/default.
+nginx_disable_default_site: yes
